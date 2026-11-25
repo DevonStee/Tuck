@@ -76,7 +76,7 @@ func item(x: CGFloat, y: CGFloat, shade: CGFloat, glyph: String, degrees: CGFloa
     transform.concat()
     NSColor(white: shade, alpha: 1).setFill()
     NSBezierPath(ovalIn: NSRect(x: -itemSize / 2, y: -itemSize / 2, width: itemSize, height: itemSize)).fill()
-    let glyphSize = itemSize * 0.6
+    let glyphSize = itemSize * 0.62
     let glyphRect = NSRect(x: 0, y: 0, width: glyphSize, height: glyphSize)
     let tinted = NSImage(size: glyphRect.size, flipped: false) { rect in
         image.draw(in: rect)
@@ -112,13 +112,13 @@ func renderLayer(_ name: String, draw: () -> Void) throws {
 
 // One grid: the bar is a capsule, items sit inside it with equal padding all round,
 // and every item, in the bar or out of it, is the same size.
-let barHeight: CGFloat = 150
-let padding: CGFloat = 26
+let barHeight: CGFloat = 172
+let padding: CGFloat = 20
 let itemSize = barHeight - padding * 2
 let pitch = itemSize + padding
 let barTop: CGFloat = 340
 let barMid = barTop - barHeight / 2
-let pocketTop: CGFloat = -60
+let pocketTop: CGFloat = -95
 let pocketBottom: CGFloat = -340
 /// The icon's own corner, read off Icon Composer's macOS mask, minus the pocket's inset,
 /// keeps the pocket's bottom corners concentric with the icon.
@@ -137,7 +137,7 @@ try renderLayer("baritems") {
     }
 }
 try renderLayer("falling") {
-    item(x: slotX, y: barTop - barHeight - pitch * 0.9, shade: 0.94, glyph: "cloud", degrees: 14)
+    item(x: slotX, y: barTop - barHeight - itemSize * 0.62, shade: 0.94, glyph: "cloud", degrees: 14)
     item(x: left + padding + itemSize / 2 + pitch * 0.4, y: pocketTop + itemSize * 0.22, shade: 0.88, glyph: "bell", degrees: -10)
 }
 try renderLayer("front") {
