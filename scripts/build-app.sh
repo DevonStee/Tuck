@@ -9,14 +9,20 @@ app="build/Tuck.app"
 rm -rf "$app"
 mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
 cp .build/release/Tuck "$app/Contents/MacOS/Tuck"
-# Compiles the Icon Composer project. Stderr only carries dyld noise from Xcode's tools.
-xcrun actool Resources/Tuck.icon \
+# Compiles the Icon Composer project. Stderr only carries dyld noise from Xcode's tools;
+# real problems come back on stdout as "error:" lines, which actool doesn't fail on.
+icon_log="$(xcrun actool Resources/Tuck.icon \
     --compile "$app/Contents/Resources" \
     --output-format human-readable-text --errors \
     --output-partial-info-plist build/icon-partial.plist \
     --app-icon Tuck --include-all-app-icons \
     --target-device mac --minimum-deployment-target 14.0 --platform macosx \
-    2>/dev/null >/dev/null
+    2>/dev/null)"
+if grep -q "error:" <<<"$icon_log"; then
+    grep "error:" <<<"$icon_log" >&2
+    echo "Icon compilation failed." >&2
+    exit 1
+fi
 
 cat > "$app/Contents/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
