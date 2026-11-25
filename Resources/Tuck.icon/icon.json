@@ -1,0 +1,43 @@
+{
+  "fill": {
+    "linear-gradient": [
+      "display-p3:0.17000,0.17000,0.19000,1.00000",
+      "display-p3:0.04000,0.04000,0.05000,1.00000"
+    ]
+  },
+  "groups": [
+    {
+      "name": "shown",
+      "layers": [
+        { "glass": true, "image-name": "shown.png", "name": "shown" }
+      ],
+      "blur-material": 0.3,
+      "shadow": { "kind": "neutral", "opacity": 0.5 },
+      "specular": true,
+      "translucency": { "enabled": true, "value": 0.3 }
+    },
+    {
+      "name": "divider",
+      "layers": [
+        { "glass": true, "image-name": "divider.png", "name": "divider" }
+      ],
+      "blur-material": 0.2,
+      "shadow": { "kind": "neutral", "opacity": 0.5 },
+      "specular": true,
+      "translucency": { "enabled": true, "value": 0.1 }
+    },
+    {
+      "name": "tucked",
+      "layers": [
+        { "glass": true, "image-name": "tucked.png", "name": "tucked" }
+      ],
+      "blur-material": 0.1,
+      "shadow": { "kind": "neutral", "opacity": 0.3 },
+      "specular": true,
+      "translucency": { "enabled": true, "value": 0.5 }
+    }
+  ],
+  "supported-platforms": {
+    "squares": "shared"
+  }
+}
