@@ -80,7 +80,7 @@ func item(x: CGFloat, y: CGFloat, shade: CGFloat, glyph: String, degrees: CGFloa
     let glyphRect = NSRect(x: 0, y: 0, width: glyphSize, height: glyphSize)
     let tinted = NSImage(size: glyphRect.size, flipped: false) { rect in
         image.draw(in: rect)
-        NSColor(white: 0.22, alpha: 1).setFill()
+        NSColor(white: 0.6, alpha: 1).setFill()
         rect.fill(using: .sourceAtop)
         return true
     }
