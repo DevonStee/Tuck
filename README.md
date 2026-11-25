@@ -23,4 +23,4 @@ scripts/install.sh
 
 ## 图标
 
-`Resources/Tuck.icon` 是 Icon Composer 工程，图层由 `swift scripts/make-icon.swift Resources/Tuck.icon/Assets` 画出来，打包时用 `actool` 编译。
+`Resources/Tuck.icon` 是 Icon Composer 工程，图层由 `swift scripts/make-icon.swift Resources/Tuck.icon/Assets` 画出来，打包时用 `actool` 编译。圆点上的蓝牙、Wi-Fi、云、铃铛符号来自 [Lucide](https://lucide.dev)（ISC 协议，见 `Resources/glyphs/LICENSE`），线条加粗到 2.6。

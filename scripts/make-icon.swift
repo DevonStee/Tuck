@@ -59,10 +59,33 @@ func continuousRect(_ rect: NSRect, radius: CGFloat, corners: Set<Int> = [0, 1, 
     return path
 }
 
-/// A menu bar item. Circles, because they sit concentric inside the capsule bar.
-func item(x: CGFloat, y: CGFloat, shade: CGFloat) {
+/// Lucide glyphs (ISC licence, see Resources/glyphs/LICENSE), stroke thickened for icon sizes.
+let glyphDirectory = outputDirectory.deletingLastPathComponent().deletingLastPathComponent()
+    .appendingPathComponent("glyphs")
+
+/// A menu bar item: a light circle, concentric inside the capsule bar, with a dark
+/// glyph on it, like a switched-on button in Control Center.
+func item(x: CGFloat, y: CGFloat, shade: CGFloat, glyph: String, degrees: CGFloat = 0) {
+    guard let image = NSImage(contentsOf: glyphDirectory.appendingPathComponent("\(glyph).svg")) else {
+        fatalError("missing glyph \(glyph)")
+    }
+    NSGraphicsContext.saveGraphicsState()
+    let transform = NSAffineTransform()
+    transform.translateX(by: x, yBy: y)
+    transform.rotate(byDegrees: degrees)
+    transform.concat()
     NSColor(white: shade, alpha: 1).setFill()
-    NSBezierPath(ovalIn: NSRect(x: x - itemSize / 2, y: y - itemSize / 2, width: itemSize, height: itemSize)).fill()
+    NSBezierPath(ovalIn: NSRect(x: -itemSize / 2, y: -itemSize / 2, width: itemSize, height: itemSize)).fill()
+    let glyphSize = itemSize * 0.6
+    let glyphRect = NSRect(x: 0, y: 0, width: glyphSize, height: glyphSize)
+    let tinted = NSImage(size: glyphRect.size, flipped: false) { rect in
+        image.draw(in: rect)
+        NSColor(white: 0.22, alpha: 1).setFill()
+        rect.fill(using: .sourceAtop)
+        return true
+    }
+    tinted.draw(in: glyphRect.offsetBy(dx: -glyphSize / 2, dy: -glyphSize / 2))
+    NSGraphicsContext.restoreGraphicsState()
 }
 
 /// Renders one transparent, full-canvas layer with the origin at the canvas centre.
@@ -109,13 +132,13 @@ try renderLayer("bar") {
     NSBezierPath(roundedRect: rect, xRadius: barHeight / 2, yRadius: barHeight / 2).fill()
 }
 try renderLayer("baritems") {
-    for index in 0..<2 {
-        item(x: right - padding - itemSize / 2 - pitch * CGFloat(index), y: barMid, shade: 0.97)
+    for (index, glyph) in ["wifi", "bluetooth"].enumerated() {
+        item(x: right - padding - itemSize / 2 - pitch * CGFloat(index), y: barMid, shade: 0.97, glyph: glyph)
     }
 }
 try renderLayer("falling") {
-    item(x: slotX, y: barTop - barHeight - pitch * 0.9, shade: 0.94)
-    item(x: left + padding + itemSize / 2 + pitch * 0.4, y: pocketTop + itemSize * 0.05, shade: 0.88)
+    item(x: slotX, y: barTop - barHeight - pitch * 0.9, shade: 0.94, glyph: "cloud", degrees: 14)
+    item(x: left + padding + itemSize / 2 + pitch * 0.4, y: pocketTop + itemSize * 0.22, shade: 0.88, glyph: "bell", degrees: -10)
 }
 try renderLayer("front") {
     NSColor(white: 0.6, alpha: 1).setFill()
